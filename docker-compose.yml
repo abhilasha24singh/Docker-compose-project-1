@@ -1,0 +1,31 @@
+version: '3'
+services:
+        dbos:
+                image: mysql:5.7
+                volumes:
+                        - ghost_db_storage:/var/lib/mysql
+                restart: always
+                environment:
+                        MYSQL_ROOT_PASSWORD: rootpass
+                        MYSQL_USER: nishtha
+                        MYSQL_PASSWORD: redhat
+                        MYSQL_DATABASE: mydb
+        ghostos:
+                image: ghost
+                restart: always
+                depends_on:
+                        - dbos
+                ports:
+                        - 8000:2368
+                volumes:
+                        - ghostos_storage:/var/lib/ghost
+                environment:
+                        database_client: mysql
+                        database_connection_host: dbos
+                        database_connection_user: nishtha
+                        database_connection_password: redhat
+                        database_connection_database: mydb
+
+volumes:
+        ghost_db_storage:
+        ghostos_storage:
